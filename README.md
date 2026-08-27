@@ -1,1 +1,1 @@
-# Smart Rental and Roommate Finder 
+# Smart Rental and Roommate Finder  
