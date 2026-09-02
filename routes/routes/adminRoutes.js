@@ -1,0 +1,2 @@
+import {Router} from "express";import {dashboard,properties,verifyProperty,users,disableUser} from "../controllers/adminController.js";import {protect,authorize} from "../middleware/authMiddleware.js";
+const r=Router();r.use(protect,authorize("admin"));r.get("/dashboard",dashboard);r.get("/properties",properties);r.put("/properties/:id/verify",verifyProperty);r.get("/users",users);r.put("/users/:id/status",disableUser);export default r;

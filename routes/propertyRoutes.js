@@ -1,0 +1,2 @@
+import {Router} from "express"; import {list,getById,mine,recommended,create,update,remove} from "../controllers/propertyController.js"; import {protect,authorize} from "../middleware/authMiddleware.js";
+const r=Router();r.get("/",list);r.get("/mine",protect,authorize("owner","admin"),mine);r.get("/recommended",protect,recommended);r.get("/:id",getById);r.post("/",protect,authorize("owner","admin"),create);r.put("/:id",protect,authorize("owner","admin"),update);r.delete("/:id",protect,authorize("owner","admin"),remove);export default r;
