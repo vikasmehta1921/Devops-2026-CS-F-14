@@ -1,4 +1,16 @@
+﻿# Dependencies
 node_modules/
+
+# Environment (contains secrets!)
 .env
-uploads/*
-*.log
+
+# Uploads folder (user-uploaded files)
+uploads/
+
+# Editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
