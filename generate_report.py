@@ -41,7 +41,7 @@ def get_repo_info():
 
     return repo_name, branch_name
 
-def get_git_metrics(interval="monthly"):
+def get_git_metrics(interval="weekly"):
     """
     Parses Git commit logs and aggregates metrics.
     Supported intervals: 'weekly', 'monthly', 'final'
