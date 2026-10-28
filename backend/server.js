@@ -25,9 +25,9 @@ await connectDB();
 
 const app = express();
 
-// ==========================================
-// Prometheus Metrics
-// ==========================================
+
+// Prometheus Metrices
+
 app.get("/metrics", async (req, res) => {
   try {
     res.set("Content-Type", register.contentType);
