@@ -1,12 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-/**
- * Vite configuration for the React frontend.
- *
- * The development server uses a proxy so that API requests
- * can be forwarded to the backend server without CORS issues.
- */
+
 export default defineConfig({
   // Enable React support in Vite
   plugins: [react()],
