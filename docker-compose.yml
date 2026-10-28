@@ -1,5 +1,8 @@
 services:
 
+  # ==========================================
+  # Backend - Node.js / Express
+  # ==========================================
   backend:
     build:
       context: ./backend
@@ -11,6 +14,9 @@ services:
       PORT: 5000
     restart: unless-stopped
 
+  # ==========================================
+  # Frontend - React / Nginx
+  # ==========================================
   frontend:
     build:
       context: ./frontend
@@ -20,4 +26,30 @@ services:
       - "5173:80"
     depends_on:
       - backend
+    restart: unless-stopped
+
+  # ==========================================
+  # Prometheus - Monitoring / Metrics
+  # ==========================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: smart-rental-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # ==========================================
+  # Grafana - Monitoring Dashboard
+  # ==========================================
+  grafana:
+    image: grafana/grafana:latest
+    container_name: smart-rental-grafana
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
     restart: unless-stopped

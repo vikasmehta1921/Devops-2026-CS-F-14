@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
+import { register } from "./metrics.js";
+
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import propertyRoutes from "./routes/propertyRoutes.js";
@@ -18,17 +20,57 @@ import adminRoutes from "./routes/adminRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
+
 await connectDB();
 
 const app = express();
-app.use(cors({ origin: process.env.CLIENT_URL?.split(",") || true, credentials: true }));
+
+// ==========================================
+// Prometheus Metrics
+// ==========================================
+app.get("/metrics", async (req, res) => {
+  try {
+    res.set("Content-Type", register.contentType);
+    res.end(await register.metrics());
+  } catch (error) {
+    res.status(500).end(error);
+  }
+});
+
+// ==========================================
+// Middleware
+// ==========================================
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL?.split(",") || true,
+    credentials: true,
+  })
+);
+
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
+
 app.use("/uploads", express.static("uploads"));
 
-app.get("/", (req,res)=>res.json({message:"Smart Rental API is running"}));
-app.get("/api/health", (req,res)=>res.json({ok:true, service:"smart-rental"}));
+// ==========================================
+// Basic Routes
+// ==========================================
+app.get("/", (req, res) =>
+  res.json({
+    message: "Smart Rental API is running",
+  })
+);
 
+app.get("/api/health", (req, res) =>
+  res.json({
+    ok: true,
+    service: "smart-rental",
+  })
+);
+
+// ==========================================
+// API Routes
+// ==========================================
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/properties", propertyRoutes);
@@ -43,8 +85,17 @@ app.use("/api/messages", messageRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/admin", adminRoutes);
 
+// ==========================================
+// Error Handling
+// ==========================================
 app.use(notFound);
 app.use(errorHandler);
 
+// ==========================================
+// Start Server
+// ==========================================
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, ()=>console.log(`Server running on http://localhost:${PORT}`));
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
