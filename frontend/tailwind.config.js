@@ -7,6 +7,7 @@ export default {
         sans: ["Inter", "system-ui", "sans-serif"],
         display: ["Outfit", "Inter", "system-ui", "sans-serif"],
       },
+      
 
       colors: {
         navy: {
@@ -21,6 +22,7 @@ export default {
           800: "#0f1f5c",
           900: "#0a1128",
         },
+        
 
         violet: {
           400: "#a78bfa",
