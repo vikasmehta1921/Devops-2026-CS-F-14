@@ -16,10 +16,10 @@ pipeline {
         stage('Clone Backend') {
             steps {
                 bat '''
-                // Remove the previous backend folder if it exists
+                REM Remove the previous backend folder if it exists
                 if exist backend-source rmdir /s /q backend-source
 
-                // Clone the backend branch from GitHub
+                REM Clone the backend branch from GitHub
                 git clone --branch feature/backend https://github.com/vikasmehta1921/Devops-2026-CS-F-14.git backend-source
                 '''
             }
@@ -31,10 +31,10 @@ pipeline {
         stage('Clone Frontend') {
             steps {
                 bat '''
-                // Remove the previous frontend folder if it exists
+                REM Remove the previous frontend folder if it exists
                 if exist frontend-source rmdir /s /q frontend-source
 
-                // Clone the frontend branch from GitHub
+                REM Clone the frontend branch from GitHub
                 git clone --branch feature/frontend https://github.com/vikasmehta1921/Devops-2026-CS-F-14.git frontend-source
                 '''
             }
@@ -47,10 +47,10 @@ pipeline {
             steps {
                 dir('backend-source/backend') {
                     bat '''
-                    // Display installed Node.js version
+                    REM Display installed Node.js version
                     node --version
 
-                    // Display installed npm version
+                    REM Display installed npm version
                     npm --version
                     '''
                 }
@@ -78,10 +78,10 @@ pipeline {
             steps {
                 dir('frontend-source/frontend') {
                     bat '''
-                    // Display installed Node.js version
+                    REM Display installed Node.js version
                     node --version
 
-                    // Display installed npm version
+                    REM Display installed npm version
                     npm --version
                     '''
                 }
