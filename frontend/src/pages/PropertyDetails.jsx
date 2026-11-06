@@ -17,14 +17,20 @@ export default function PropertyDetails() {
   const [msgType, setMsgType] = useState("success");
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [wishlistAnimating, setWishlistAnimating] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(null);
   const { user } = useAuth();
   const nav = useNavigate();
 
   useEffect(() => {
-    api.get(`/properties/${id}`).then((r) => setProperty(r.data));
+    api
+      .get(`/properties/${id}`)
+      .then((r) => setProperty(r.data))
+      .catch((err) => setLoadError(err.response?.data?.message || "Property not found"))
+      .finally(() => setLoading(false));
   }, [id]);
 
-  if (!property)
+  if (loading)
     return (
       <main className="min-h-screen flex items-center justify-center">
         <div className="flex items-center gap-3 text-slate-400">
@@ -34,6 +40,18 @@ export default function PropertyDetails() {
           </svg>
           Loading property…
         </div>
+      </main>
+    );
+
+  if (loadError || !property)
+    return (
+      <main className="min-h-screen flex flex-col items-center justify-center gap-4 text-center px-4">
+        <div className="text-4xl">🏠</div>
+        <h2 className="text-2xl font-bold text-white">{loadError || "Property Not Found"}</h2>
+        <p className="text-slate-400 max-w-md">The property you are looking for does not exist or may have been removed.</p>
+        <Link to="/search" className="btn-primary mt-2">
+          Browse Available Properties
+        </Link>
       </main>
     );
 

@@ -26,7 +26,7 @@ await connectDB();
 const app = express();
 
 
-// Prometheus Metrices
+// Prometheus Metrics
 
 app.get("/metrics", async (req, res) => {
   try {
@@ -40,9 +40,20 @@ app.get("/metrics", async (req, res) => {
 
 // Middleware
 
+const allowedOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(",").map((url) => url.trim().replace(/\/+$/, ""))
+  : [];
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL?.split(",") || true,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.length === 0) return callback(null, true);
+      const normalized = origin.replace(/\/+$/, "");
+      if (allowedOrigins.includes(normalized) || allowedOrigins.includes("*")) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
     credentials: true,
   })
 );
